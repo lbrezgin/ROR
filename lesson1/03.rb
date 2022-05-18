@@ -1,4 +1,3 @@
-
 puts "Введите стороны треугольника:"
 print "a: "
 	a = gets.chomp.to_i
