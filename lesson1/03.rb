@@ -2,9 +2,9 @@ puts "Введите стороны треугольника:"
 print "a: "
   a = gets.chomp.to_i
 print "b: "
-	b = gets.chomp.to_i
+  b = gets.chomp.to_i
 print "c: "
-	c = gets.chomp.to_i
+  c = gets.chomp.to_i
   
 if (a > b && a > c) && a**2 == b**2 + c**2 
   puts "Этот треугольник - прямоугольный."
