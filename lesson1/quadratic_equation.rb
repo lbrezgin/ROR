@@ -18,7 +18,7 @@ def discriminant(a, b, c)
     puts "x1 = #{x1}"
     puts "x2 = #{x2}"
   elsif d == 0 
-    x = -b/(2*a)
+    x = -b / (2*a)
     puts "X = #{x}"
   else
     puts "Корней нет!"
