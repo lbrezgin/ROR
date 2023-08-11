@@ -7,10 +7,10 @@ puts "Год - "
 year = gets.chomp.to_i
 
 months = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-ves_months = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 if (year % 4 == 0) && (year % 100 == 0) && (year % 400 == 0)
-  puts "Порядковый номер даты #{ves_months[(0...month)].inject(0) {|sum, v| sum += v } + day}"
+  months[2] = 29
+  puts "Порядковый номер даты #{months[(0...month)].inject(0) {|sum, v| sum += v } + day}"
 else
   puts "Порядковый номер даты #{months[(0...month)].inject(0) {|sum, v| sum += v } + day}" 
 end
