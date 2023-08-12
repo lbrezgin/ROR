@@ -8,34 +8,23 @@
 class Station 
   
   attr_reader :title
-  attr_accessor :trains_on_station
+  attr_accessor :trains
 
   def initialize(title)
     @title = title
-    @trains_on_station = []
+    @trains = []
   end
 
   def add_train(train)
-    @trains_on_station.push(train)
+    @trains.push(train)
   end
 
   def remove_train(train)
-    @trains_on_station.delete(train)
+    @trains.delete(train)
   end
 
-  def return_train_by_type(vid)
-    count = 0
-    train_type = []
-
-    @trains_on_station.each do |train_object|
-      if train_object.type == vid  
-        train_type << train_object
-        count += 1
-      end
-    end
-
-    return train_type
-    puts "Поездов такого типа в данный момент на станции - #{count}"
+  def return_train_by_type(type)
+    trains.select { |train| train.type == type}
   end
 end
 

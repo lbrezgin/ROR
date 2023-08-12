@@ -10,58 +10,60 @@
 # Может перемещаться между станциями, указанными в маршруте. Перемещение возможно вперед и назад, но только на 1 станцию за раз.
 # Возвращать предыдущую станцию, текущую, следующую, на основе маршрута
 
-class Train 
-
-  attr_reader :speed, :wagons, :type
-  attr_accessor :position_index
+class Train
+  attr_reader :route, :current_station_index, :type
+  attr_accessor :wagons, :speed
 
   def initialize(number, type, wagons)
     @number = number
     @type = type
     @wagons = wagons
     @speed = 0
-    @position_index = 0
+  end
+
+  def assign_route(route)
+    @route = route
+    @current_station_index = 0
+    current_station.add_train(self)
+  end
+
+  def current_station
+    route.stations[current_station_index]
+  end
+  
+  def next_station
+    route.stations[current_station_index + 1]
+  end
+  
+  def previous_station
+    route.stations[current_station_index - 1]
+  end
+
+  def go_next_station
+    return unless next_station 
+    @current_station_index += 1
+    current_station.add_train(self)
+  end
+  
+  def go_previous_station
+    return unless previous station
+    @current_station_index -= 1
+    current_station.add_train(self)
   end
 
   def pick_up_speed(value)
-    @speed += value
+    self.speed += value
   end
 
   def stop
-    @speed = 0
+    self.speed = 0
   end
 
   def unhook_the_wagon
-    @wagons -= 1 if @speed == 0
+    self.wagons -= 1 if speed == 0
   end
 
   def attach_a_wagon
-    @wagons += 1 if @speed == 0
-  end
-
-  def add_route(route)
-    route.stations.each {|station| station.trains_on_station.delete(self)}
-    route.stations[@position_index].add_train(self)
-  end
-
-  def move_to_station(route, direction)
-    route.stations[@position_index].remove_train(self)
-    if direction == "next"
-      route.stations[@position_index+=1].add_train(self)
-    elsif direction == "back"
-      route.stations[@position_index-=1].add_train(self)
-    end
-  end
-
-  def current_station(route)
-    route.stations[@position_index]
-  end
-
-  def next_station(route) 
-    route.stations[@position_index+1]
-  end
-
-  def previous_station(route)
-    route.stations[@position_index-1]
+    self.wagons += 1 if speed == 0
   end
 end
