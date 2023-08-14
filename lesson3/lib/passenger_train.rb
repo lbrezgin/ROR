@@ -1,6 +1,8 @@
 class PassengerTrain < Train
+  attr_reader :type
 
-  def attach_a_wagon(wagon)
-    self.wagons << wagon if wagon.is_a?(PassengerWagon)
+  def initialize(number)
+    super 
+    @type = :passenger
   end
 end
