@@ -1,10 +1,20 @@
 class Train
-  attr_reader :route, :current_station_index, :wagons, :speed
+  attr_reader :route, :current_station_index, :wagons, :speed, :number
+  include Manufacturer
+  include InstanceCounter
+
+  @@train_objects = []
 
   def initialize(number)
     @number = number
     @wagons = []
     @speed = 0
+    @@train_objects.push(self)
+    register_instance
+  end
+
+  def self.find(num)
+    @@train_objects.select { |train| train.number == num ? train : nil } 
   end
 
   def assign_route(route)

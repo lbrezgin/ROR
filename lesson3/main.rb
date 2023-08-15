@@ -5,6 +5,8 @@ require_relative 'lib/cargo_wagon'
 require_relative 'lib/passenger_wagon'  
 require_relative 'lib/passenger_train'  
 require_relative 'lib/cargo_train'
+require_relative 'lib/wagon'
+require_relative 'lib/manufacturer'
 
 
 class Main
@@ -97,7 +99,7 @@ class Main
 
       puts "Выберите конечную станцию: "
       input = gets.chomp
-      end_station =  @stations.select { |station| station.title == input }
+      end_station = @stations.select { |station| station.title == input }
 
       p @routes << Route.new(start_station[0], end_station[0])
     end
@@ -192,4 +194,3 @@ class Main
 end
 
 Main.new.start
-
