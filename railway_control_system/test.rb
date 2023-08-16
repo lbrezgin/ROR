@@ -9,7 +9,7 @@ require_relative 'lib/passenger_wagon'
 require_relative 'lib/passenger_train'  
 require_relative 'lib/cargo_train'
 
-#Тесты основного фунционалаыы
+#Тесты основного функционала
 station1 = Station.new('Riga') #создаем станции
 station2= Station.new('Liepaja')
 station3 = Station.new('Jurmala')
