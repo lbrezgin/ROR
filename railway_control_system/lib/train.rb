@@ -3,18 +3,18 @@ class Train
   include Manufacturer
   include InstanceCounter
 
-  @@train_objects = []
+  @@all = []
 
   def initialize(number)
     @number = number
     @wagons = []
     @speed = 0
-    @@train_objects.push(self)
+    @@all.push(self)
     register_instance
   end
 
   def self.find(num)
-    @@train_objects.select { |train| train.number == num ? train : nil } 
+    @@all.select { |train| train.number == num ? train : nil } 
   end
 
   def assign_route(route)

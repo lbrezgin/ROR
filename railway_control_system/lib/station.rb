@@ -4,16 +4,16 @@ class Station
   attr_reader :title
   attr_accessor :trains
 
-  @@all_stations = []
+  @@all = []
   
   def self.all 
-    @@all_stations
+    @@all
   end
 
   def initialize(title)
     @title = title
     @trains = []
-    @@all_stations.push(self)
+    @@all.push(self)
     register_instance
   end
 
