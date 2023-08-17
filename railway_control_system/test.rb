@@ -46,7 +46,7 @@ require_relative 'lib/cargo_train'
 # puts "Station instances - #{Station.instances}"
 # puts "Route instances - #{Route.instances}"
 
-#Тесты нового функионала валидаций
+#Тесты нового функционала валидаций
 begin
   station = Station.new("aa")
 rescue => exception
