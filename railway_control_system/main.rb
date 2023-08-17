@@ -1,13 +1,14 @@
+require_relative 'lib/validator' 
+require_relative 'lib/instance_counter' 
+require_relative 'lib/manufacturer' 
 require_relative 'lib/station'  
 require_relative 'lib/train'  
-require_relative 'lib/route'  
+require_relative 'lib/route' 
+require_relative 'lib/wagon'
 require_relative 'lib/cargo_wagon'  
 require_relative 'lib/passenger_wagon'  
 require_relative 'lib/passenger_train'  
 require_relative 'lib/cargo_train'
-require_relative 'lib/wagon'
-require_relative 'lib/manufacturer'
-
 
 class Main
   ACTIONS = [
@@ -15,11 +16,12 @@ class Main
     { id: '1', title: 'Создать поезд', action: :create_train },
     { id: '2', title: 'Создать маршрут', action: :create_route },
     { id: '3', title: 'Действия со станциями', action: :station_action },
-    { id: '4', title: 'Назначать маршрут поезду', action: :add_train_route },
+    { id: '4', title: 'Назначить маршрут поезду', action: :add_train_route },
     { id: '5', title: 'Добавить или удалить вагон у поезда', action: :wagon_actions },
     { id: '6', title: 'Перемещать поезд по станциям', action: :move_train },
-    { id: '7', title: 'Просмотреть станции и поезда', action: :check_stations },
-    { id: '8', title: 'Выйти', action: :exit }
+    { id: '7', title: 'Просмотреть станции', action: :check_stations },
+    { id: '8', title: 'Просмотреть поезда', action: :check_trains },
+    { id: '9', title: 'Выйти', action: :exit }
   ]
 
   def initialize
@@ -32,7 +34,7 @@ class Main
     loop do
       show_menu
       choice = gets_choice
-      break if call_action(choice) == "8"
+      break if call_action(choice) == "9"
     end
   end
 
@@ -47,7 +49,8 @@ class Main
     puts "Нажмите 5 чтобы добавить или удалить вагон у поезда" 
     puts "Нажмите 6 чтобы перемещать поезд по станциям" 
     puts "Нажмите 7 чтобы просмотреть станции и поезда" 
-    puts "Нажмите 8 чтобы выйти"
+    puts "Нажмите 8 чтобы просмотреть поезда" 
+    puts "Нажмите 9 чтобы выйти"
   end
 
   def gets_choice
@@ -68,22 +71,27 @@ class Main
     puts "Вы хотите создавть грузовой(нажмите 1) или поссажирский(нажмите 2) поезд?"
     type = gets.chomp
     puts "Какой номер у поезда?"
-    number = gets.chomp
 
-    case type 
-    when "1"
-      p @trains << CargoTrain.new(number)
-    when "2"
-      p @trains << PassengerTrain.new(number)
+    begin
+      number = gets.chomp
+      case type 
+      when "1"
+        puts "Поезд #{@trains << CargoTrain.new(number)} был успешно создан!"
+      when "2"
+        puts "Поезд #{@trains << PassengerTrain.new(number)} был успешно создан!"
+      end
+    rescue => exception
+      p exception
+      puts "Попробуйте еще раз!"
+      retry
     end
-    puts "Поезд успешно создан!"
   end
-  
+
   def create_station
-    puts "Введите название для станции"
+    puts "Введите название для станции: "
     title = gets.chomp
     
-    p @stations << Station.new(title)
+    @stations << Station.new(title)
     puts "Станция успешно создана!"
   end
 
@@ -101,7 +109,7 @@ class Main
       input = gets.chomp
       end_station = @stations.select { |station| station.title == input }
 
-      p @routes << Route.new(start_station[0], end_station[0])
+      @routes << Route.new(start_station[0], end_station[0])
     end
   end
 
@@ -140,9 +148,9 @@ class Main
   
     case input 
     when "1"  
-      p find_route.add_station(get_station(find_station)[0])
+      find_route.add_station(get_station(find_station)[0])
     when "2"  
-      p find_route.delete_station(get_station(find_station)[0])
+      find_route.delete_station(get_station(find_station)[0])
     end
   end
 
@@ -152,7 +160,7 @@ class Main
 
   def add_train_route 
     puts "Какому поезду хотите добавить маршрут?"
-    p find_train.assign_route(find_route)
+    find_train.assign_route(find_route)
   end
   
   def wagon_actions
@@ -168,7 +176,6 @@ class Main
       wagon = create_wagon(train_f)
       train_f.attach_a_wagon(wagon)
     end
-    p @trains
   end
 
   def create_wagon(train)
@@ -185,11 +192,20 @@ class Main
   end
 
   def check_stations
-    p @stations
+    puts "Станции - #{@stations}"
+  end
+
+  def check_trains
+    puts "Ваши поезд: "
+    cargo = @trains.select { |train| train.type == :cargo }
+    puts "Грузовые: #{cargo}"
+
+    passenger = @trains.select { |train| train.type == :passenger }
+    puts "Пассажирские: #{passenger}"
   end
 
   def exit 
-    "8"
+    "9"
   end
 end
 

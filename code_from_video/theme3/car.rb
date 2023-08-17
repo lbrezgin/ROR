@@ -39,6 +39,9 @@ class Car #same as Car = Class.new do ... end
   include Debugger
 
   attr_reader :current_rpm
+  attr_accessor :number
+
+  NUMBER_FORMAT = /^[а-я]{1}\d{3}[а-я]{2}$/i
 
   @@instances = 0
 
@@ -46,12 +49,14 @@ class Car #same as Car = Class.new do ... end
     @@instances
   end
 
-  debug 'Start interface'
+  # debug 'Start interface'
 
-  def initialize
+  def initialize(number)
     @current_rpm = 0
     @@instances += 1
-    debug 'initialize'
+    # debug 'initialize'
+    @number = number
+    validate!
   end
 
   def start_engine 
@@ -62,9 +67,22 @@ class Car #same as Car = Class.new do ... end
     current_rpm.zero?
   end 
 
-  debug 'End interface'
+  def valid?
+    validate!
+    true
+  rescue 
+    false
+  end
+
+  # debug 'End interface'
 
   protected
+
+  def validate! 
+    raise "Number can't be nill" if number.nil?
+    raise "Number shoul be at least 6 symbols" if number.length < 6
+    raise "Number has invalid format" if number !~ NUMBER_FORMAT
+  end
 
   attr_writer :current_rpm
 
@@ -80,6 +98,6 @@ end
 class MotorBike 
   include FuelTank
   include Debugger
-
-  debug 'MotorBike class'
+  # debug 'MotorBike class'
 end
+
