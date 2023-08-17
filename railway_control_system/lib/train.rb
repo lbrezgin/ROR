@@ -2,8 +2,10 @@ class Train
   attr_reader :route, :current_station_index, :wagons, :speed, :number
   include Manufacturer
   include InstanceCounter
+  include Validator
 
   @@all = []
+  NUMBER_FORMAT = /^[a-zA-Z\d]{3}-?[a-zA-Z\d]{2}$/
 
   def initialize(number)
     @number = number
@@ -11,6 +13,7 @@ class Train
     @speed = 0
     @@all.push(self)
     register_instance
+    check_validaty
   end
 
   def self.find(num)
@@ -67,7 +70,13 @@ class Train
 
   protected 
 
-  attr_writer :wagons, :speed #protected а не private, чтобы были доступны в подклассах (по соглашению), а protected потому, что изменить вагоны и скорость могут только соответсвущие методы (unhook_the_wagon, stop и т.д.)
+  attr_writer :wagons, :speed
+
+  def check_validaty
+    raise "Номер поезда не может быть пустым!" if number.nil?
+    raise "Формат номера поезда должен быть ХХХ-ХХ, в котором Х это любая буквы или цифра, а '-' является не обязательным" if number !~ NUMBER_FORMAT
+  end
 end
+
 
 
