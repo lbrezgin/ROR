@@ -11,13 +11,17 @@ class Train
     @number = number
     @wagons = []
     @speed = 0
+    validate!
     @@all.push(self)
     register_instance
-    check_validaty
   end
 
   def self.find(num)
     @@all.select { |train| train.number == num ? train : nil } 
+  end
+
+  def self.all 
+    @@all
   end
 
   def assign_route(route)
@@ -72,11 +76,14 @@ class Train
 
   attr_writer :wagons, :speed
 
-  def check_validaty
-    raise "Номер поезда не может быть пустым!" if number.nil?
-    raise "Формат номера поезда должен быть ХХХ-ХХ, в котором Х это любая буквы или цифра, а '-' является не обязательным" if number !~ NUMBER_FORMAT
+  def validate!
+    errors = []
+    errors << "Номер поезда не может быть пустым!" if number.nil?
+    errors << "Формат номера поезда должен быть ХХХ-ХХ, в котором Х это любая буквы или цифра, а '-' является не обязательным" if number !~ NUMBER_FORMAT
+    raise errors.each { |error| p error } unless errors.empty?
   end
 end
+
 
 
 

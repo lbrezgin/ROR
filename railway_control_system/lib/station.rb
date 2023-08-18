@@ -14,9 +14,9 @@ class Station
   def initialize(title)
     @title = title
     @trains = []
+    validate!
     @@all.push(self)
     register_instance
-    check_validaty
   end
 
   def add_train(train)
@@ -33,9 +33,12 @@ class Station
 
   private 
 
-  def check_validaty 
-    raise "Название станции не может быть пустым!" if title.nil?
-    raise "Название станции должно состоять как минимум из 3 символов!" if title.length < 3
+  def validate! 
+    errors = []
+    errors << "Название станции не может быть пустым!" if title.nil?
+    errors << "Название станции должно состоять как минимум из 3 символов!" if title.length < 3
+    raise errors.each { |error| puts error } unless errors.empty?
   end
 end
+
 

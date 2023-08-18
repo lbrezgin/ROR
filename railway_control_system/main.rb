@@ -48,7 +48,7 @@ class Main
     puts "Нажмите 4 чтобы назначить маршрут поезду" 
     puts "Нажмите 5 чтобы добавить или удалить вагон у поезда" 
     puts "Нажмите 6 чтобы перемещать поезд по станциям" 
-    puts "Нажмите 7 чтобы просмотреть станции и поезда" 
+    puts "Нажмите 7 чтобы просмотреть станции" 
     puts "Нажмите 8 чтобы просмотреть поезда" 
     puts "Нажмите 9 чтобы выйти"
   end
@@ -70,6 +70,11 @@ class Main
   def create_train
     puts "Вы хотите создавть грузовой(нажмите 1) или поссажирский(нажмите 2) поезд?"
     type = gets.chomp
+    loop do 
+      break if type == "1" || type == "2"
+      puts "Пожалуйста, выберайте только 1 или 2"
+      type = gets.chomp
+    end
     puts "Какой номер у поезда?"
 
     begin
@@ -89,27 +94,39 @@ class Main
 
   def create_station
     puts "Введите название для станции: "
-    title = gets.chomp
-    
-    @stations << Station.new(title)
-    puts "Станция успешно создана!"
+    begin
+      title = gets.chomp
+      @stations << Station.new(title)
+      puts "Станция успешно создана!"
+    rescue => exception
+      p exception
+      puts "Попробуйте еще раз!"
+      retry
+    end
   end
 
   def create_route 
     if @stations.size < 2 
       puts "Недостаточно станций!"
     else
-      @stations.each { |station| puts station.title }
+      begin
+        @stations.each { |station| puts station.title }
 
-      puts "Выберите начальную станцию: "
-      input = gets.chomp
-      start_station = @stations.select { |station| station.title == input }
+        puts "Выберите начальную станцию: "
+        input = gets.chomp
+        start_station = @stations.select { |station| station.title == input }
 
-      puts "Выберите конечную станцию: "
-      input = gets.chomp
-      end_station = @stations.select { |station| station.title == input }
+        puts "Выберите конечную станцию: "
+        input = gets.chomp
+        end_station = @stations.select { |station| station.title == input }
 
-      @routes << Route.new(start_station[0], end_station[0])
+        @routes << Route.new(start_station[0], end_station[0])
+        puts "Маршрут успешно создан!"
+      rescue => exception
+        p exception
+        puts "Попробуйте еще раз!"
+        retry
+      end
     end
   end
 
@@ -210,3 +227,4 @@ class Main
 end
 
 Main.new.start
+

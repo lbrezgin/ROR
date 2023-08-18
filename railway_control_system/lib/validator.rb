@@ -6,7 +6,7 @@ module Validator
     false
   end
 
-  def check_validaty 
+  def validate! 
     #У каждого класса метод реализуется по своему в зависимости от атрибутов
   end
 end
