@@ -31,6 +31,12 @@ class Station
     trains.select { |train| train.type == type}
   end
 
+  def each_train
+    trains.each do |train|
+      yield(train)
+    end
+  end
+
   private 
 
   def validate! 

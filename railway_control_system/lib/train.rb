@@ -72,6 +72,12 @@ class Train
     self.wagons << wagon if wagon.type == type
   end
 
+  def each_wagon 
+    wagons.each do |wagon|
+      yield(wagon)
+    end
+  end
+
   protected 
 
   attr_writer :wagons, :speed

@@ -12,16 +12,20 @@ require_relative 'lib/cargo_train'
 
 class Main
   ACTIONS = [
-    { id: '0', title: 'Создать станцию', action: :create_station },
-    { id: '1', title: 'Создать поезд', action: :create_train },
-    { id: '2', title: 'Создать маршрут', action: :create_route },
-    { id: '3', title: 'Действия со станциями', action: :station_action },
-    { id: '4', title: 'Назначить маршрут поезду', action: :add_train_route },
-    { id: '5', title: 'Добавить или удалить вагон у поезда', action: :wagon_actions },
-    { id: '6', title: 'Перемещать поезд по станциям', action: :move_train },
-    { id: '7', title: 'Просмотреть станции', action: :check_stations },
-    { id: '8', title: 'Просмотреть поезда', action: :check_trains },
-    { id: '9', title: 'Выйти', action: :exit }
+    { id: '0', title: 'Выйти', action: :exit },
+    { id: '1', title: 'Создать станцию', action: :create_station },
+    { id: '2', title: 'Создать поезд', action: :create_train },
+    { id: '3', title: 'Создать маршрут', action: :create_route },
+    { id: '4', title: 'Действия со станциями', action: :station_action },
+    { id: '5', title: 'Назначить маршрут поезду', action: :add_train_route },
+    { id: '6', title: 'Добавить или удалить вагон у поезда', action: :wagon_actions },
+    { id: '7', title: 'Перемещать поезд по станциям', action: :move_train },
+    { id: '8', title: 'Просмотреть станции', action: :check_stations },
+    { id: '9', title: 'Просмотреть поезда на станциях', action: :check_trains },
+    { id: '10', title: 'Создать тестовые данные', action: :create_test_data },
+    { id: '11', title: 'Просмотреть вагоны у поездов', action: :check_wagons },
+    { id: '12', title: 'Занять места или объем в вагоне', action: :take_in_wagon }
+
   ]
 
   def initialize
@@ -34,23 +38,26 @@ class Main
     loop do
       show_menu
       choice = gets_choice
-      break if call_action(choice) == "9"
+      break if call_action(choice) == "0"
     end
   end
 
   private
 
   def show_menu
-    puts "Нажмите 0 чтобы создать станцию"
-    puts "Нажмите 1 чтобы создать поезд"
-    puts "Нажмите 2 чтобы создать маршрут"
-    puts "Нажмите 3 чтобы удалить или добавить станцию" 
-    puts "Нажмите 4 чтобы назначить маршрут поезду" 
-    puts "Нажмите 5 чтобы добавить или удалить вагон у поезда" 
-    puts "Нажмите 6 чтобы перемещать поезд по станциям" 
-    puts "Нажмите 7 чтобы просмотреть станции" 
-    puts "Нажмите 8 чтобы просмотреть поезда" 
-    puts "Нажмите 9 чтобы выйти"
+    puts "Нажмите 0 чтобы выйти"
+    puts "Нажмите 1 чтобы создать станцию"
+    puts "Нажмите 2 чтобы создать поезд"
+    puts "Нажмите 3 чтобы создать маршрут"
+    puts "Нажмите 4 чтобы удалить или добавить станцию" 
+    puts "Нажмите 5 чтобы назначить маршрут поезду" 
+    puts "Нажмите 6 чтобы добавить или удалить вагон у поезда" 
+    puts "Нажмите 7 чтобы перемещать поезд по станциям" 
+    puts "Нажмите 8 чтобы просмотреть станции" 
+    puts "Нажмите 9 чтобы просмотреть поезда на станциях" 
+    puts "Нажмите 10 чтобы создать тестовые данные"
+    puts "Нажмите 11 чтобы просмотреть вагоны у поездов"
+    puts "Нажмите 12 чтобы занять места или объем в вагоне"
   end
 
   def gets_choice
@@ -188,18 +195,33 @@ class Main
     action = gets.chomp
     case action
     when "1"
-      train_f.unhook_the_wagon
+      if train_f.wagons.size < 1
+        puts "У поезда нет прицепленных вагонов!" 
+      else
+        train_f.unhook_the_wagon
+        puts "Вагон успешно отцеплен!"
+      end
     when "2"
       wagon = create_wagon(train_f)
       train_f.attach_a_wagon(wagon)
+      puts "Вагон успешно добавлен!"
     end
   end
 
-  def create_wagon(train)
-    if train.type == :passenger 
-      PassengerWagon.new 
-    elsif train.type == :cargo
-      CargoWagon.new
+  def create_wagon(train) 
+    puts "На сколько расчитан вагон?"
+    begin
+      input = gets.chomp.to_i
+      validate!(input)
+      if train.type == :passenger 
+        PassengerWagon.new(input)
+      elsif train.type == :cargo
+        CargoWagon.new(input)
+      end
+    rescue => e
+      p "#{e}"
+      puts "Попробуйте еще раз!"
+      retry
     end
   end
 
@@ -213,16 +235,96 @@ class Main
   end
 
   def check_trains
-    puts "Ваши поезд: "
-    cargo = @trains.select { |train| train.type == :cargo }
-    puts "Грузовые: #{cargo}"
+    @stations.each do |station|
+      station.each_train do |train|
+      puts "Станция - #{station.title}"
+      puts "Номер поезда - #{train.number}, тип - #{train.type}, кол-во вагонов - #{train.wagons.size}"
+      end
+    end
+  end
 
-    passenger = @trains.select { |train| train.type == :passenger }
-    puts "Пассажирские: #{passenger}"
+  def check_wagons
+    number = 0
+    @trains.each do |train|
+      train.each_wagon do |wagon|
+        puts "Номер вагона - #{number}, тип - #{wagon.type}, свободно - #{wagon.free}"
+        number += 1
+      end
+    end
+  end
+
+  def take_in_wagon
+    puts "В каком поезде вы хотите занять место в вагоне?"
+    train = find_train
+    puts "Какой вагон?"
+    number = 0
+    train.each_wagon do |wagon|
+      puts "#{number} - #{wagon}"
+      number += 1
+    end
+    choice = gets.chomp.to_i
+    wagon = train.wagons[choice]
+    if wagon.type == :cargo 
+      puts "В данном вагоне свободно #{wagon.free} от общего объема в #{wagon.volume}"
+      puts "Сколько объема вы хотите занять?"
+      volume = gets.chomp.to_i
+      if wagon.free >= volume
+        wagon.fill_wagon(volume)
+        puts "Вы успешно заняли вагон на #{wagon.taken}!"
+      else
+        puts "Вы не можете занять больше объема чем столько, насколько расчитан вагон!"
+      end
+      puts "Вагон уже полностью загружен!" if wagon.free == 0
+    elsif wagon.type == :passenger 
+      puts "В данном вагоне свободно #{wagon.free} мест"
+      puts "Выберите место!"
+      wagon.all_places.each do |place, status|
+        puts "#Место №#{place} - #{status}"
+      end
+      place = gets.chomp.to_i
+      if wagon.all_places[place] == :free
+        wagon.take_place(place)
+        puts "Вы успешно заняли место №#{place}, в вагоне осталось #{wagon.free} свободных мест!"
+      elsif wagon.all_places[place] == :taken
+        puts "Это место уже занято!"
+      else
+        puts "Такого места нет в вагоне!"
+      end
+    end
   end
 
   def exit 
-    "9"
+    "0"
+  end
+
+  def create_test_data
+    #Создаем грузовой поезд и добавляем ему вагоны
+    c_train1 = CargoTrain.new("test1")
+    @trains.push(c_train1)
+    c_wagon1 = CargoWagon.new(100)
+    c_wagon2 = CargoWagon.new(200)
+    c_train1.attach_a_wagon(c_wagon1)
+    c_train1.attach_a_wagon(c_wagon2)
+    
+    #создаем пассажирский поезд и добавляем ему вагоны
+    p_train1 = PassengerTrain.new("test2")
+    @trains.push(p_train1)
+    p_wagon1 = PassengerWagon.new(10)
+    p_wagon2 = PassengerWagon.new(20)
+    p_train1.attach_a_wagon(p_wagon1)
+    p_train1.attach_a_wagon(p_wagon2)
+
+    liepaja = Station.new("Liepaja")
+    riga = Station.new("Riga")
+    @stations.push(liepaja)
+    @stations.push(riga)
+    liepaja.add_train(p_train1)
+    riga.add_train(c_train1)
+    puts "Тестовые данные были успешно созданы!"
+  end 
+
+  def validate!(param)
+    raise "Неверное значение!" if param == 0
   end
 end
 
