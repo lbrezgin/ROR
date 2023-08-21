@@ -82,14 +82,14 @@ require_relative 'lib/cargo_train'
 
 #Тесты нового функционала 21.08.2023
 passenger_wagon = PassengerWagon.new(20) #Создаем новый пассажирский вагон на 20 мест
-passenger_wagon.take_place(10) #Занимаем место №10
-puts passenger_wagon.free #смотрим количество свободных мест
-puts passenger_wagon.taken #смотрим количество занятых мест
+passenger_wagon.take_place #Занимаем место 
+puts passenger_wagon.free_place #смотрим количество свободных мест
+puts passenger_wagon.used_place #смотрим количество занятых мест
 
 cargo_wagon = CargoWagon.new(100) #создаем новый грузовой вагон с вместимостью в 100
-cargo_wagon.fill_wagon(20) #заполняем вагон на 20 
-puts "В вагоне занято #{cargo_wagon.taken_volume} от общего объема в #{cargo_wagon.volume}" #смотрим сколько в вагоне занято места
-puts "В грузовом вагоне свободно #{cargo_wagon.free_volume}" #смотрим сколько в вагоне свободно места
+cargo_wagon.take_place(20) #заполняем вагон на 20 
+puts "В вагоне занято #{cargo_wagon.used_place} от общего объема в #{cargo_wagon.total_place}" #смотрим сколько в вагоне занято места
+puts "В грузовом вагоне свободно #{cargo_wagon.free_place}" #смотрим сколько в вагоне свободно места
  
 train1 = CargoTrain.new("ABC-12") #создаем поезда
 train2 = PassengerTrain.new("12345")
@@ -123,7 +123,7 @@ cargo_train.attach_a_wagon(c_wagon2)
 cargo_train.attach_a_wagon(c_wagon3)
 
 passenger_train.each_wagon do |wagon| #тестируем метод по передачи каждого вагона через блок на пассажирском поезде
-  puts "В вагоне #{wagon.free} свободных мест"
+  puts "В вагоне #{wagon.free_place} свободных мест"
 end
 
 c_wagon1.fill_wagon(10) #чтобы было показательнее, заполняем грузовые вагоны
@@ -131,7 +131,7 @@ c_wagon2.fill_wagon(20)
 c_wagon3.fill_wagon(40)
 
 cargo_train.each_wagon do |wagon| #тестируем метод на грузовом поезде
-  puts "В вагоне с объемом в #{wagon.volume}, #{wagon.free} свободного места и #{wagon.taken} занято"
+  puts "В вагоне с объемом в #{wagon.total_place}, #{wagon.free_place} свободного места и #{wagon.used_place} занято"
 end
 
 #Остальные пункты тз можно протестировать через интерефейс, предварительно создав тестовые данные, для этого нажмите 10

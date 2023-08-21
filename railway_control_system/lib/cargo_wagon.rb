@@ -1,15 +1,13 @@
 class CargoWagon < Wagon
-  attr_reader :type, :taken, :volume, :free
+  attr_reader :type
 
-  def initialize(volume)
+  def initialize(volume_total)
     @type = :cargo 
-    @volume = volume 
-    @free = volume
-    @taken = 0  
+    super
   end
 
-  def fill_wagon(num)
-    @free -= num
-    @taken += num
+  def take_place(volume)
+    return if free_place < volume
+    @used_place += volume
   end
 end

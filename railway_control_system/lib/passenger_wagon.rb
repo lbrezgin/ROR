@@ -1,31 +1,13 @@
 class PassengerWagon < Wagon
-  attr_reader :type, :places, :all_places
+  attr_reader :type
   
-
-  def initialize(places)
+  def initialize(seats_total)
     @type = :passenger
-    @places = places
-    @all_places = {}
-    create_places
+    super
   end
 
-  def take_place(number) 
-    all_places[number] = :taken
-  end
-
-  def free
-    all_places.select { |k, v| v == :free}.size
-  end
-
-  def taken 
-    all_places.select { |k, v| v == :taken}.size
-  end
-
-  private 
-
-  def create_places 
-    1.upto(places.to_i) do |place|
-      all_places[place] = :free 
-    end
+  def take_place
+    return if free_place <= 1 
+    @used_place += 1
   end
 end

@@ -247,7 +247,7 @@ class Main
     number = 0
     @trains.each do |train|
       train.each_wagon do |wagon|
-        puts "Номер вагона - #{number}, тип - #{wagon.type}, свободно - #{wagon.free}"
+        puts "Номер вагона - #{number}, тип - #{wagon.type}, свободно места- #{wagon.free_place}"
         number += 1
       end
     end
@@ -265,31 +265,20 @@ class Main
     choice = gets.chomp.to_i
     wagon = train.wagons[choice]
     if wagon.type == :cargo 
-      puts "В данном вагоне свободно #{wagon.free} от общего объема в #{wagon.volume}"
+      puts "В данном вагоне свободно #{wagon.free_place} от общего объема в #{wagon.total_place}"
       puts "Сколько объема вы хотите занять?"
       volume = gets.chomp.to_i
-      if wagon.free >= volume
-        wagon.fill_wagon(volume)
-        puts "Вы успешно заняли вагон на #{wagon.taken}!"
+      if wagon.free_place >= volume
+        wagon.take_place(volume)
+        puts "Вы успешно заняли вагон на #{volume}, загруженность вагона составляет #{wagon.used_place} из #{wagon.total_place}!"
       else
         puts "Вы не можете занять больше объема чем столько, насколько расчитан вагон!"
       end
-      puts "Вагон уже полностью загружен!" if wagon.free == 0
+      puts "Вагон уже полностью загружен!" if wagon.free_place == 0
     elsif wagon.type == :passenger 
-      puts "В данном вагоне свободно #{wagon.free} мест"
-      puts "Выберите место!"
-      wagon.all_places.each do |place, status|
-        puts "#Место №#{place} - #{status}"
-      end
-      place = gets.chomp.to_i
-      if wagon.all_places[place] == :free
-        wagon.take_place(place)
-        puts "Вы успешно заняли место №#{place}, в вагоне осталось #{wagon.free} свободных мест!"
-      elsif wagon.all_places[place] == :taken
-        puts "Это место уже занято!"
-      else
-        puts "Такого места нет в вагоне!"
-      end
+      puts "В данном вагоне свободно #{wagon.free_place} мест"
+      wagon.take_place
+      puts "Вы успешно заняли место, в вагоне осталось #{wagon.free_place} свободных мест!"
     end
   end
 
