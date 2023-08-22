@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Foo
   def bar(key)
     hash = { a: 1, b: 2 }
     value = hash[key]
-    value ||= 0
+    value || 0
   end
 
   def long_method
@@ -10,7 +12,7 @@ class Foo
   end
 
   def memoization
-    @m ||= long_method
+    @memoization ||= long_method
   end
 end
 
@@ -31,7 +33,7 @@ class User
 end
 
 class Color
-  COLORS = { red: '#f00', green: '0f0', blue: '#00f', white: '#fff' }
+  COLORS = { red: '#f00', green: '0f0', blue: '#00f', white: '#fff' }.freeze
 
   def code(name)
     @code = COLORS[name] || '#000'
