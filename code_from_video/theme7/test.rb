@@ -12,4 +12,7 @@ class String
   def method
     # что-то
   end
+
+  def new_method 
+  end
 end
