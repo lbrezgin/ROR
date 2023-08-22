@@ -6,8 +6,4 @@ class String
   def my_method
     capitalize
   end
-
-  def <<(value)
-    puts "#{self} #{value}"
-  end
 end
