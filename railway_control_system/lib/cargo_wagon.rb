@@ -1,6 +1,4 @@
 class CargoWagon < Wagon
-  attr_reader :type
-
   def initialize(volume_total)
     @type = :cargo 
     super

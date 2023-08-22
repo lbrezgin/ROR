@@ -126,9 +126,9 @@ passenger_train.each_wagon do |wagon| #тестируем метод по пер
   puts "В вагоне #{wagon.free_place} свободных мест"
 end
 
-c_wagon1.fill_wagon(10) #чтобы было показательнее, заполняем грузовые вагоны
-c_wagon2.fill_wagon(20)
-c_wagon3.fill_wagon(40)
+c_wagon1.take_place(10) #чтобы было показательнее, заполняем грузовые вагоны
+c_wagon2.take_place(20)
+c_wagon3.take_place(40)
 
 cargo_train.each_wagon do |wagon| #тестируем метод на грузовом поезде
   puts "В вагоне с объемом в #{wagon.total_place}, #{wagon.free_place} свободного места и #{wagon.used_place} занято"

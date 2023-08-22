@@ -1,6 +1,6 @@
 class Wagon
   include Manufacturer
-  attr_reader :total_place, :used_place 
+  attr_reader :type, :total_place, :used_place 
 
   def initialize(total_place)
     @total_place = total_place
