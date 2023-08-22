@@ -15,4 +15,7 @@ class String
 
   def new_method 
   end
+
+  def methods 
+  end
 end
