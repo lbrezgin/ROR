@@ -1,8 +1,8 @@
-class CargoTrain < Train
-  attr_reader :type 
+# frozen_string_literal: true
 
+class CargoTrain < Train
   def initialize(number)
-    super 
+    super
     @type = :cargo
   end
 end

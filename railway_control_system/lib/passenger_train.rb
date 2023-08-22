@@ -1,8 +1,8 @@
-class PassengerTrain < Train
-  attr_reader :type
+# frozen_string_literal: true
 
+class PassengerTrain < Train
   def initialize(number)
-    super 
+    super
     @type = :passenger
   end
 end

@@ -1,4 +1,6 @@
-class Station 
+# frozen_string_literal: true
+
+class Station
   include InstanceCounter
   include Validator
 
@@ -6,8 +8,8 @@ class Station
   attr_accessor :trains
 
   @@all = []
-  
-  def self.all 
+
+  def self.all
     @@all
   end
 
@@ -28,23 +30,19 @@ class Station
   end
 
   def return_train_by_type(type)
-    trains.select { |train| train.type == type}
+    trains.select { |train| train.type == type }
   end
 
-  def each_train
-    trains.each do |train|
-      yield(train)
-    end
+  def each_train(&block)
+    trains.each(&block)
   end
 
-  private 
+  private
 
-  def validate! 
+  def validate!
     errors = []
-    errors << "Название станции не может быть пустым!" if title.nil?
-    errors << "Название станции должно состоять как минимум из 3 символов!" if title.length < 3
-    raise errors.each { |error| puts error } unless errors.empty?
+    errors << 'Название станции не может быть пустым!' if title.nil?
+    errors << 'Название станции должно состоять как минимум из 3 символов!' if title.length < 3
+    raise(errors.each { |error| puts error }) unless errors.empty?
   end
 end
-
-

@@ -1,5 +1,8 @@
-class Route 
+# frozen_string_literal: true
+
+class Route
   attr_reader :first_station, :last_station, :stations
+
   include InstanceCounter
   include Validator
 
@@ -10,7 +13,7 @@ class Route
     @last_station = last_station
     @stations = [first_station, last_station]
     validate!
-    @@all.push(self) #этого не надо было добавлять, но я добавил чтобы проверить не создаются ли невалидные объекты
+    @@all.push(self) # этого не надо было добавлять, но я добавил чтобы проверить не создаются ли невалидные объекты
     register_instance
   end
 
@@ -26,10 +29,11 @@ class Route
     stations.delete(station)
   end
 
-  private 
+  private
 
   def validate!
-    raise "Станция должна быть объектом класса станций (Station)!" unless stations.all? {|station| station.is_a?(Station)}
+    raise 'Станция должна быть объектом класса станций (Station)!' unless stations.all? do |station|
+                                                                            station.is_a?(Station)
+                                                                          end
   end
 end
-
