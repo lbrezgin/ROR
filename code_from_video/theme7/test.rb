@@ -8,14 +8,4 @@ class String
   def my_method
     capitalize
   end
-
-  def method
-    # что-то
-  end
-
-  def new_method 
-  end
-
-  def methods 
-  end
 end
