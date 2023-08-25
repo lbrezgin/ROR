@@ -49,6 +49,8 @@ module Validation
       false
     end 
 
+    private 
+    
     def presence_valid?(value)
       !value.nil? && !value.to_s.empty?
     end
