@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
 class Train
-  attr_reader :route, :current_station_index, :wagons, :speed, :number, :type
-
+  extend Accessors
   include Manufacturer
   include InstanceCounter
-  include Validator
+  include Validation
+
+  NUMBER_FORMAT = /^[a-zA-Z\d]{3}-?[a-zA-Z\d]{2}$/.freeze
+  
+  attr_reader :route, :current_station_index, :wagons, :speed, :number, :type
+  validate :number, :presence
+  validate :number, :format, NUMBER_FORMAT
 
   @@all = []
-  NUMBER_FORMAT = /^[a-zA-Z\d]{3}-?[a-zA-Z\d]{2}$/.freeze
 
   def initialize(number)
     @number = number
@@ -84,13 +88,4 @@ class Train
   protected
 
   attr_writer :wagons, :speed
-
-  def validate!
-    errors = []
-    errors << 'Номер поезда не может быть пустым!' if number.nil?
-    if number !~ NUMBER_FORMAT
-      errors << "Формат номера поезда должен быть ХХХ-ХХ, в котором Х это любая буквы или цифра, а '-' необяхателен"
-    end
-    raise(errors.each { |error| p error }) unless errors.empty?
-  end
 end

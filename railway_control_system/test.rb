@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-require_relative 'lib/validator'
+require_relative 'lib/accessors'
+require_relative 'lib/validation'
+require_relative 'lib/wagon_actions'
+require_relative 'lib/train_actions'
+require_relative 'lib/route_actions'
+require_relative 'lib/station_actions'
 require_relative 'lib/instance_counter'
 require_relative 'lib/manufacturer'
 require_relative 'lib/station'
@@ -76,11 +81,11 @@ train = Train.new('12345')
 cargo_train = CargoTrain.new('ABC-12')
 passenger_train = PassengerTrain.new('NEW45')
 
-p station1.valid?
-p route.valid?
-p train.valid?
-p cargo_train.valid?
-p passenger_train.valid?
+# p station1.validate?
+p route.validate?
+p train.validate?
+p cargo_train.validate?
+p passenger_train.validate?
 
 # Тесты нового функционала 21.08.2023
 passenger_wagon = PassengerWagon.new(20) # Создаем новый пассажирский вагон на 20 мест
@@ -137,4 +142,10 @@ cargo_train.each_wagon do |wagon| # тестируем метод на груз�
   puts "В вагоне с объемом в #{wagon.total_place}, #{wagon.free_place} свободного места и #{wagon.used_place} занято"
 end
 
-# Остальные пункты тз можно протестировать через интерефейс, предварительно создав тестовые данные, для этого нажмите 10
+#Тесты добавления модуля Validation и Accessors
+train = Train.new('ABC12')
+p train.validate?
+station = Station.new("Liepaja")
+p station.validate?
+route = Route.new(Station.new('Riga'), Station.new('Vilnus'))
+p route.validate?

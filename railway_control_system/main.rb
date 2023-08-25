@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-
+require_relative 'lib/accessors'
+require_relative 'lib/validation'
 require_relative 'lib/wagon_actions'
 require_relative 'lib/train_actions'
 require_relative 'lib/route_actions'
 require_relative 'lib/station_actions'
-require_relative 'lib/validator'
 require_relative 'lib/instance_counter'
 require_relative 'lib/manufacturer'
 require_relative 'lib/station'

@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 class Route
-  attr_reader :first_station, :last_station, :stations
-
+  extend Accessors
   include InstanceCounter
-  include Validator
+  include Validation
+
+  attr_reader :first_station, :last_station, :stations
+  validate :first_station, :type, Station
+  validate :last_station, :type, Station
 
   @@all = []
 
@@ -27,13 +30,5 @@ class Route
 
   def delete_station(station)
     stations.delete(station)
-  end
-
-  private
-
-  def validate!
-    raise 'Станция должна быть объектом класса станций (Station)!' unless stations.all? do |station|
-                                                                            station.is_a?(Station)
-                                                                          end
   end
 end
